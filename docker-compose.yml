@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  soa-gateway:
+    image: mawi12345/nginx-jwt:latest
+    restart: always
+    ports:
+     - "8000:80"
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf
+      - ./gateway/nginx.vhost.conf:/etc/nginx/conf.d/default.conf
+      - ./gateway/public.pem:/etc/nginx/keys/public.pem
+  soa-login-web:
+    image: nginx:latest
+    restart: always
+    volumes:
+     - ./login:/var/www
+     - ./login/.docker/nginx.vhost.conf:/etc/nginx/conf.d/default.conf
+  soa-login-php:
+    build: ./login
+    restart: always
+    volumes:
+      - ./gateway/private.pem:/private.pem
+    environment:
+      APP_ENV: prod
+      APP_SECRET: a390ea794b631fdd3e80b987d47c8b03
+      DATABASE_URL: mysql://root:hc4uTS445NhEh@soa-login-db:3306/login
+      JWT_ISSUER: http://localhost:8000
+      JWT_AUDIENCE: http://localhost:8000
+      JWT_EXPIRATION_TIME: 3600
+      JWT_PRIVATE_KEY_FILE: /private.pem
+      JWT_PRIVATE_KEY_PASSWORD: soa-example
+  soa-login-db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: hc4uTS445NhEh
