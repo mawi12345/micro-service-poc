@@ -5,7 +5,7 @@ LABEL maintainer="Martin Wind <martin.wind@im-c.de>"
 WORKDIR /var/www
 
 RUN apt-get update \
-  && apt-get install -y libzip-dev \
+  && apt-get install -y libzip-dev unzip \
   && docker-php-ext-install mysqli pdo_mysql zip \
   && curl https://raw.githubusercontent.com/composer/getcomposer.org/master/web/installer | php --
 

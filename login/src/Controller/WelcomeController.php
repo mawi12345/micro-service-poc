@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class WelcomeController extends AbstractController
 {
     /**
-     * @Route("/login/", name="welcome")
+     * @Route("/", name="welcome")
      */
-    public function index()
+    public function index(Request $req)
     {
-        return $this->redirect('/login/login');
+        return $this->redirect($req->getBasePath().'/login');
         /*
         return $this->render('welcome/index.html.twig', [
             'controller_name' => 'WelcomeController',
