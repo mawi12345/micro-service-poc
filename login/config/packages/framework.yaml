@@ -11,7 +11,7 @@ framework:
         cookie_secure: auto
         cookie_samesite: lax
         cookie_lifetime: 0
-        name: SoaAuthSession
+        name: SoaPreAuthSession
 
     #esi: true
     #fragments: true

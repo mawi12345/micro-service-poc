@@ -52,6 +52,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface {
         $response = new RedirectResponse($redir);
         $cookie = new Cookie('SoaAuth', $token, $expiration);
         $response->headers->setCookie($cookie);
+        if ($request->cookies->has('loginRedirect')) {
+            $response->headers->clearCookie('loginRedirect');
+        }
         return $response;
     }
 

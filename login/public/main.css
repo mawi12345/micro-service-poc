@@ -1,13 +1,12 @@
 
 .fos-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 90vh;
 }
 
-.fos-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.user-info {
+  padding: 16px;
 }
