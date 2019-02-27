@@ -13,6 +13,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Keychain;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
 
 class JWTAuthenticator extends AbstractGuardAuthenticator
 {
@@ -40,7 +42,11 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
     public function getCredentials(Request $request)
     {
         $tokenString = $request->cookies->get('SoaAuth');
-        $token = (new Parser())->parse((string) $tokenString);
+        $token = null;
+        try {
+          $token = (new Parser())->parse((string) $tokenString);
+        } catch(\Exception $e) {}
+
         return [
             'token' => $token,
         ];
@@ -62,11 +68,13 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // check credentials - e.g. make sure the password is valid
-        // no credential check is needed in this case
+        // check credentials - e.g. make sure the signature is valid
+        $token = $credentials['token'];
+        $signer = new Sha256();
+        $keychain = new Keychain();
+        $publicKeyFile = getenv('JWT_PUBLIC_KEY_FILE');
+        return $token->verify($signer, $keychain->getPublicKey('file://'.$publicKeyFile));
 
-        // return true to cause authentication success
-        return true;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

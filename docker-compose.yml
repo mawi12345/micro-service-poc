@@ -8,17 +8,13 @@ services:
      - "8000:80"
     volumes:
       - ./gateway/nginx.conf:/etc/nginx/nginx.conf
-      - ./gateway/nginx.vhost.conf:/etc/nginx/conf.d/default.conf
       - ./gateway/public.pem:/etc/nginx/keys/public.pem
   soa-login-web:
     image: nginx:latest
     restart: always
-    ports:
-     - "8001:80"
     volumes:
      - ./login/public:/var/www/public
      - ./login/.docker/nginx.conf:/etc/nginx/nginx.conf
-     - ./login/.docker/nginx.vhost.conf:/etc/nginx/conf.d/default.conf
   soa-login-php:
     build: ./login
     restart: always
@@ -36,5 +32,7 @@ services:
   soa-login-db:
     image: mariadb:latest
     restart: always
+    volumes:
+       - ./var/soa-login-db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: hc4uTS445NhEh
