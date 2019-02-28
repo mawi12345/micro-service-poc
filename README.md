@@ -14,7 +14,7 @@ Start all containers `docker-compose up`.
 Create the login-service database `./login-service-create-user.sh`.
 Add a user `./login-service-setup.sh`.
 
-Now you can navigate to `http://localhost` and enter the user cretentials.
+Now you can navigate to `http://localhost:8000` and enter the user cretentials.
 
 ## Concept
 
